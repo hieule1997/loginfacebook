@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '615142375582240',
+                autoLogAppEvents: true,
+                cookie     : true,
+                xfbml: true,
+                version: 'v3.2'
+            });
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    document.getElementById('status').innerHTML = 'You connect';
+
+                } else if (response.status === 'not_authorized') {
+                    document.getElementById('status').innerHTML = 'You not login';
+                }
+                else {
+                    document.getElementById('status').innerHTML = 'You not loggin into facebook';
+                }
+            });
+            FB.AppEvents.logPageView(); 
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        function login() {
+            FB.login(function (response) {
+                if (response.status === 'connected') {
+                    document.getElementById('status').innerHTML = 'You connect';
+
+                } else if (response.status === 'not_authorized') {
+                    document.getElementById('status').innerHTML = 'You not login';
+                }
+                else {
+                    document.getElementById('status').innerHTML = 'You not loggin into facebook';
+                }
+            }, { scope: 'emails' });
+        }
+        function logout() {
+            FB.getLoginStatus(function (response) {
+                    if (response.status === 'connected') {
+                        FB.logout(function () {
+                            location.reload();
+                        });
+                    } else if (response.status === 'not_authorized') {
+                        document.getElementById('status').innerHTML = 'You not login';
+                    }
+                    else {
+                        document.getElementById('status').innerHTML = 'You not loggin into facebook';
+                    }
+            });
+        };
+            
+        function getinfo() {
+            FB.api('/me', 'GET', { fields: 'first_name,last_name,name,id' }, function (response) {
+                console.log(response);
+            });
+        }
+    </script>
+    <div id="status"></div>
+    <button onclick="login()">Login </button>
+    <button onclick="logout()">logout</button>
+    <button onclick="getinfo()">info</button>
+
+</body>
+
+</html>
